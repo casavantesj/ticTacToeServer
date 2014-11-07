@@ -3,17 +3,32 @@ package edu.dcu.cpssd.tictactoe.core.test;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.dcu.cpssd.tictactoe.core.Board;
 import edu.dcu.cpssd.tictactoe.core.Game;
+import edu.dcu.cpssd.tictactoe.core.User;
 
 public class GameTest {
+	private ArrayList<User> users;
+	private Board board;
+	private User jenny;
+	private User norma;
+	private Game game;
 
 	@Before
 	public void setUp() throws Exception {
+		users = new ArrayList<>(2);
+		jenny = new User("jenny");
+		norma = new User("norma");
+		users.add(jenny);
+		users.add(norma);
+		board = new Board();
+		game = new Game(users, board);
 	}
 
 	@After
@@ -28,31 +43,21 @@ public class GameTest {
 	// test return letter
 	@Test
 	public final void testIfReturnLetterX() {
-		String id = "id-1";
-		Game game = new Game(id);
-
-		assertEquals("X", game.getLetter());
-
+		assertEquals(1, game.getUserTurn(jenny));
 	}
 
-	public final void testIfReturnLetter0() {
-		String id = "id-1";
-		int turn = 2;
-		Game game = new Game(id);
-		game.setTurn(turn);
-		assertEquals("O", game.getLetter());
+	@Test
+	public final void testIfReturnLetterO() {
+		assertEquals(2, game.getUserTurn(norma));
 	}
 
+	@Test
 	public final void testIfReturnLetterError() {
-		String id = "id-1";
-		Game game = new Game(id);
-		
-		assertEquals("no valid", game.getLetter());
+		assertEquals(0, game.getUserTurn(new User("no valid")));
 	}
 
 	@Test
 	public final void testIfGetReturnPositions() {
-		Game game = new Game("23");
 		int[] positions = game.getBoard().getPositions();
 
 		assertArrayEquals(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, positions);
@@ -62,36 +67,31 @@ public class GameTest {
 	public final void testIfGetReturnBoardPositions() throws Exception {
 		int position = 1;
 		int turn = 2;
-		Game game = new Game("23");
 		game.setTurn(turn);
-		int[] positions = game.move(position, turn);
+		int[] positions = game.move(position, norma);
 		assertArrayEquals(new int[] { 0, 2, 0, 0, 0, 0, 0, 0, 0 }, positions);
 	}
 
 	@Test
 	public final void testIfGetReturnBoardPositionswothPosition14() throws Exception {
-		// TODO
+		User user = new User("jenny");
 		int position = 14;
-		int turn = 2;
-		Game game = new Game("23");
+		int turn = 0;
 		game.setTurn(turn);
-		int[] positions = game.move(position, turn);
+		int[] positions = game.move(position, user);
 		assertArrayEquals(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, positions);
 	}
 
-	@Test
+	/*@Test
 	public final void testIfGetReturnBoardAllPositions() throws Exception {
-		// TODO
-		int position = 7;
-		int turn = 2;
-		Game game = new Game("23");
-		game.setTurn(turn);
-		int[] positions = game.move(position, 1);
-		positions = game.move(0, 1);
-		positions = game.move(2, 2);
-		assertArrayEquals(new int[] { 1, 0, 2, 0, 0, 0, 0, 1, 0 }, positions);
+		User user = new User("jen");
+		game.setTurn(0);
+		int[] positions = game.move(7, user);
+		positions = game.move(2, user);
+		positions = game.move(0, user);
+		assertArrayEquals(new int[] { 1, 0, 1, 0, 0, 0, 0, 1, 0 }, positions);
 	}
-
+*/
 	// test return id
 
 	// test return winner
@@ -103,9 +103,8 @@ public class GameTest {
 		Board board = new Board(boardPositions);
 		Game game = new Game("23", board);
 		game.setTurn(turn);
-		
+
 		assertEquals(true, game.isWinner(turn));
 		// como testear
 	}
-
 }

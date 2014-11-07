@@ -2,6 +2,8 @@ package edu.dcu.cpssd.tictactoe.core;
 
 import java.util.ArrayList;
 
+import edu.dcu.cpssd.tictactoe.core.exceptions.GameException;
+
 public class Game {
 	final ArrayList<User> users;
 	final Board board;
@@ -40,21 +42,15 @@ public class Game {
 		return this;
 	}
 
-	public String getLetter() {
-		if (turn == 1) {
-			return "X";
-		}
-		if (turn == 2) {
-			return "O";
-		}
-
-		return "no valid";
+	public int getUserTurn(User user) {
+		return users.indexOf(user) + 1;
 	}
 
-	public int[] move(int position, int turn) throws Exception {
+	public int[] move(int position, User user) throws GameException {
+		int turn = getUserTurn(user);
 		// TODO check if turn is wrong
 		if (turn != this.turn) {
-			throw new IllegalArgumentException("It's not your turn!!");
+			throw new GameException("It's not your turn!!", 105);
 		}
 		int[] positions = board.move(position, turn);
 		this.turn = turn == 1? 2 : 1;
@@ -86,5 +82,9 @@ public class Game {
 
 	public void setTurn(int turn) {
 		this.turn = turn;
+	}
+
+	public String getId() {
+		return this.id;
 	}
 }

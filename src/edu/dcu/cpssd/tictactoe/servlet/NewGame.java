@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import edu.dcu.cpssd.tictactoe.core.GameFactory;
 import edu.dcu.cpssd.tictactoe.core.Game;
+import edu.dcu.cpssd.tictactoe.core.User;
 
 /**
  * Servlet implementation class NewGame
@@ -26,7 +28,6 @@ public class NewGame extends HttpServlet {
 	 */
 	public NewGame() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -37,25 +38,37 @@ public class NewGame extends HttpServlet {
 			throws ServletException, IOException {
 		String name = request.getParameter("name");
 
-		ServletContext context = getServletContext();
-		Game newGame;
-		JSONObject requestObject = new JSONObject().put("name", name);
+		ServletContext servletContex = getServletConfig().getServletContext();
 
-		if (context.getAttribute("id") == null) {
-			newGame = new Game("id");
-		} else {
-			newGame = (Game) context.getAttribute("id");
+		GameFactory gameFactory = (GameFactory) servletContex.getAttribute("gameFactory");
+
+		if (gameFactory == null) {
+			gameFactory = new GameFactory();
 		}
 
-		//JSONObject responseObject = newGame.createNewGame(requestObject);
+		User user = new User(name);
+		Game game = gameFactory.newGame(user);
+		JSONObject responseObject = new JSONObject().put("id", game.getId()).put("letter",
+				game.getUserTurn(user));
+		servletContex.setAttribute("gameFactory", gameFactory);
+		request.getSession().setAttribute("user", new User(name));
 
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
-	//	responseObject.write(out);
+		responseObject.write(out);
 		out.flush();
 		out.close();
-		context.setAttribute("id", newGame);
-		request.getSession().setAttribute("id", newGame);
+		
+
+		/*
+		 * String name = request.getParameter("name"); ServletContext
+		 * servletContext = getServletContext(); GameFactory gameFactory =
+		 * (GameFactory) servletContext.getAttribute("gameFactory"); if
+		 * (gameFactory == null) { gameFactory = new GameFactory(); } User user
+		 * = new User(name); Game game = gameFactory.newGame(user);
+		 * request.getSession().setAttribute("user", new User(name));
+		 * servletContext.setAttribute("gameFactory", gameFactory);
+		 */
 
 	}
 

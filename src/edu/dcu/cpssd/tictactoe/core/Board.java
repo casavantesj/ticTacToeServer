@@ -17,6 +17,7 @@ public class Board {
 
 	public int[] move(int position, int turn) {
 		// TODO jennifer 5/11/2014 check length and throw exceptions
+		
 		if (position < positions.length && position >= 0) {
 			positions[position] = turn;
 		} 
