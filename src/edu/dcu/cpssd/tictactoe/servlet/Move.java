@@ -43,9 +43,10 @@ public class Move extends HttpServlet {
 			responseObject = new JSONObject().put("status", status);
 		} catch (GameException e) {
 			e.printStackTrace();
-			responseObject = new JSONObject().put("status", "error")
-					.put("message", e.getMessage())
-					.put("code", e.getCode());
+			responseObject = e.getErrorType();
+//			responseObject = new JSONObject().put("status", "error")
+//					.put("message", e.getMessage())
+//					.put("code", e.getCode());
 		}
 		writeResponse(response, responseObject);
 	}

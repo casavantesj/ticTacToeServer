@@ -50,7 +50,7 @@ public class Game {
 		int turn = getUserTurn(user);
 		// TODO check if turn is wrong
 		if (turn != this.turn) {
-			throw new GameException("It's not your turn!!", 105);
+			throw new GameException(ErrorType.NOT_PLAYERS_TURN);
 		}
 		int[] positions = board.move(position, turn);
 		this.turn = turn == 1? 2 : 1;
