@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import edu.dcu.cpssd.tictactoe.core.Board;
 import edu.dcu.cpssd.tictactoe.core.GameFactory;
 import edu.dcu.cpssd.tictactoe.core.Game;
+import edu.dcu.cpssd.tictactoe.core.exceptions.GameException;
 
 /**
  * Servlet implementation class NextMove
@@ -38,24 +39,35 @@ public class NextMove extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String id = request.getParameter("id");
 
-		ServletContext servletContext = getServletConfig().getServletContext();
+		try {
+			ServletContext servletContext = getServletConfig().getServletContext();
 
-		GameFactory gameFactory = (GameFactory) servletContext.getAttribute("gameFactory");
-		Game game = gameFactory.getGameWithId(id);
+			GameFactory gameFactory = (GameFactory) servletContext.getAttribute("gameFactory");
+			String id = request.getParameter("id");
+			Game game = gameFactory.getGameWithId(id);
 
-		Board board = game.getBoard();
-		int turn = game.getTurn();
-		int[] positions = board.getPositions();
-		int winner = game.getWinner();
+			Board board = game.getBoard();
+			int turn = game.getTurn();
+			int[] positions = board.getPositions();
+			int winner = game.getWinner();
 
-		response.setContentType("application/json");
-		PrintWriter out = response.getWriter();
-		new JSONObject().put("board", positions).put("turn", turn).put("winner", winner).write(out);
-		out.flush();
-		out.close();
+			JSONObject responseObject = new JSONObject().put("board", positions).put("turn", turn)
+					.put("winner", winner);
+			writeResponse(response, responseObject);
+
+		} catch (GameException ge) {
+			writeResponse(response, ge.getErrorType());
+		}
 
 	}
 
+	private void writeResponse(HttpServletResponse response, JSONObject responseObject)
+			throws IOException {
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		responseObject.write(out);
+		out.flush();
+		out.close();
+	}
 }

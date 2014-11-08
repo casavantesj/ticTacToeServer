@@ -12,9 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import edu.dcu.cpssd.tictactoe.core.GameFactory;
 import edu.dcu.cpssd.tictactoe.core.Game;
+import edu.dcu.cpssd.tictactoe.core.GameFactory;
 import edu.dcu.cpssd.tictactoe.core.User;
+import edu.dcu.cpssd.tictactoe.core.exceptions.GameException;
 
 /**
  * Servlet implementation class NewGame
@@ -36,40 +37,35 @@ public class NewGame extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String name = request.getParameter("name");
+		try {
+			ServletContext servletContex = getServletConfig().getServletContext();
+			GameFactory gameFactory = (GameFactory) servletContex.getAttribute("gameFactory");
 
-		ServletContext servletContex = getServletConfig().getServletContext();
+			if (gameFactory == null) {
+				gameFactory = new GameFactory();
+			}
+			String name = request.getParameter("name");
+			User user = new User(name);
+			Game game = gameFactory.newGame(user);
+			
+			servletContex.setAttribute("gameFactory", gameFactory);
+			request.getSession().setAttribute("user", user);
 
-		GameFactory gameFactory = (GameFactory) servletContex.getAttribute("gameFactory");
+			JSONObject responseObject = new JSONObject().put("id", game.getId()).put("letter",
+					game.getUserTurn(user));
+			writeResponse(response, responseObject);
 
-		if (gameFactory == null) {
-			gameFactory = new GameFactory();
+		} catch (GameException ge) {
+			writeResponse(response, ge.getErrorType());
 		}
+	}
 
-		User user = new User(name);
-		Game game = gameFactory.newGame(user);
-		JSONObject responseObject = new JSONObject().put("id", game.getId()).put("letter",
-				game.getUserTurn(user));
-		servletContex.setAttribute("gameFactory", gameFactory);
-		request.getSession().setAttribute("user", new User(name));
-
+	private void writeResponse(HttpServletResponse response, JSONObject responseObject)
+			throws IOException {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 		responseObject.write(out);
 		out.flush();
 		out.close();
-		
-
-		/*
-		 * String name = request.getParameter("name"); ServletContext
-		 * servletContext = getServletContext(); GameFactory gameFactory =
-		 * (GameFactory) servletContext.getAttribute("gameFactory"); if
-		 * (gameFactory == null) { gameFactory = new GameFactory(); } User user
-		 * = new User(name); Game game = gameFactory.newGame(user);
-		 * request.getSession().setAttribute("user", new User(name));
-		 * servletContext.setAttribute("gameFactory", gameFactory);
-		 */
-
 	}
-
 }

@@ -3,13 +3,15 @@ package edu.dcu.cpssd.tictactoe.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.dcu.cpssd.tictactoe.core.exceptions.GameException;
+
 public class GameFactory {
 	private Game incompleteGame = null;
 	private Map<String, Game> games = new HashMap<>();
 	private Map<User, Game> users = new HashMap<>();
 	int count = 1;
 
-	public Game newGame(User user) {
+	public Game newGame(User user) throws GameException {
 		Game game;
 		String id;
 		if (incompleteGame == null) {
@@ -28,8 +30,16 @@ public class GameFactory {
 		return game;
 	}
 
-	public Game getGameWithId(String id) {
-		return games.get(id);
+	public Game getGameWithId(String id) throws GameException {
+		if(id == null || id.isEmpty()) {
+			throw new GameException(ErrorType.MISSING_PARAMETER_IN_REQUEST);
+		}
+		
+		Game game = games.get(id);
+		if (game == null) {
+			throw new GameException(ErrorType.UNKNOWN_PARAMETER_IN_REQUEST);
+		}
+		return game;
 	}
 
 	public Game getGameByUser(User user) {

@@ -12,7 +12,10 @@ public class Game {
 	int winner = 0;
 	boolean first = false;
 
-	public Game(String id) {
+	public Game(String id) throws GameException {
+		if(id == null || id.isEmpty()){
+			throw new GameException(ErrorType.MISSING_PARAMETER_IN_REQUEST);
+		}
 		this.id = id;
 		this.users = new ArrayList<User>(2);
 		this.board = new Board();
@@ -23,7 +26,7 @@ public class Game {
 		this.board = board;
 	}
 
-	public Game(String id, Board board) {
+	public Game(String id, Board board) throws GameException {
 		this.id = id;
 		this.users = new ArrayList<>(2);
 		this.users.add(new User("test"));
@@ -36,7 +39,7 @@ public class Game {
 		return users;
 	}
 
-	public Game createNewGame(String name) {
+	public Game createNewGame(String name) throws GameException {
 		User user = new User(name);
 		users.add(user);
 		return this;

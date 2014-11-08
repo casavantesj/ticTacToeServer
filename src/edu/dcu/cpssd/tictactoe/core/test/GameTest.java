@@ -12,6 +12,7 @@ import org.junit.Test;
 import edu.dcu.cpssd.tictactoe.core.Board;
 import edu.dcu.cpssd.tictactoe.core.Game;
 import edu.dcu.cpssd.tictactoe.core.User;
+import edu.dcu.cpssd.tictactoe.core.exceptions.GameException;
 
 public class GameTest {
 	private ArrayList<User> users;
@@ -52,7 +53,7 @@ public class GameTest {
 	}
 
 	@Test
-	public final void testIfReturnLetterError() {
+	public final void testIfReturnLetterError() throws Exception {
 		assertEquals(0, game.getUserTurn(new User("no valid")));
 	}
 
@@ -97,7 +98,7 @@ public class GameTest {
 	// test return winner
 
 	@Test
-	public final void testIfIsWinner() {
+	public final void testIfIsWinner() throws Exception {
 		int turn = 2;
 		int[] boardPositions = new int[] { 2, 2, 2, 0, 0, 0, 0, 0, 0 };
 		Board board = new Board(boardPositions);
