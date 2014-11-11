@@ -47,6 +47,6 @@ public class GameFactory {
 	}
 
 	public String getNextId() {
-		return "id " + count++;
+		return "game-" + count++;
 	}
 }
