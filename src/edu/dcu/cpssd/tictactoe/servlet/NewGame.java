@@ -44,15 +44,17 @@ public class NewGame extends HttpServlet {
 			if (gameFactory == null) {
 				gameFactory = new GameFactory();
 			}
+
 			String name = request.getParameter("name");
 			User user = new User(name);
 			Game game = gameFactory.newGame(user);
 			
+
 			servletContex.setAttribute("gameFactory", gameFactory);
 			request.getSession().setAttribute("user", user);
 
-			JSONObject responseObject = new JSONObject().put("id", game.getId()).put("letter",
-					game.getUserTurn(user));
+			JSONObject responseObject = new JSONObject().put("letter",
+					game.getUserTurn(user)).put("status", "okay").put("id", game.getId());
 			writeResponse(response, responseObject);
 
 		} catch (GameException ge) {

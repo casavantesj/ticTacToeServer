@@ -18,16 +18,16 @@ import edu.dcu.cpssd.tictactoe.core.Game;
 import edu.dcu.cpssd.tictactoe.core.exceptions.GameException;
 
 /**
- * Servlet implementation class NextMove
+ * Servlet implementation class Next
  */
-@WebServlet(name = "nextMove", urlPatterns = { "/nextMove" })
-public class NextMove extends HttpServlet {
+@WebServlet(name = "next", urlPatterns = { "/next" })
+public class Next extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public NextMove() {
+	public Next() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -38,7 +38,6 @@ public class NextMove extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 
 		try {
 			ServletContext servletContext = getServletConfig().getServletContext();
@@ -57,6 +56,8 @@ public class NextMove extends HttpServlet {
 			writeResponse(response, responseObject);
 
 		} catch (GameException ge) {
+			System.out.println(ge.getMessage());
+			ge.printStackTrace();
 			writeResponse(response, ge.getErrorType());
 		}
 
