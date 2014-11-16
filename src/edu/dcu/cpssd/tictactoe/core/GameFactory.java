@@ -55,9 +55,10 @@ public class GameFactory {
 	
 	public User getUserById(String gameId) throws GameException {
 		try {
-			int id = Integer.valueOf(gameId.substring(4));
+			int id = Integer.valueOf(gameId.substring(5));
 			return userList.get(id);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new GameException(ErrorType.UNKNOWN_PARAMETER_IN_REQUEST);
 		}
 	}

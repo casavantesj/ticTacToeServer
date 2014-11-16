@@ -56,19 +56,17 @@ public class Game {
 			throw new GameException(ErrorType.NOT_PLAYERS_TURN);
 		}
 		int[] positions = board.move(position, turn);
-		this.turn = turn == 1 ? 2 : 1;
+		if (board.isWinner(turn)) {
+			this.turn = 0;
+			this.winner = turn;
+		} else {
+			this.turn = turn == 1 ? 2 : 1;
+		}
 		return positions;
 	}
 
 	public boolean isWinner(int turn) {
-		if (winner != 0) {
-			return turn == winner;
-		}
-		boolean isWinner = board.isWinner(turn);
-		if (isWinner) {
-			this.winner = turn;
-		}
-		return isWinner;
+		return turn == winner;
 	}
 
 	public Board getBoard() {
@@ -80,13 +78,7 @@ public class Game {
 	}
 
 	public int getWinner() {
-		for (int i = 1; i <= 2; i++) {
-			if(isWinner(i)){
-				return turn;
-				
-			}
-		}
-		return 0;
+		return winner;
 	}
 
 	public void setTurn(int turn) {
