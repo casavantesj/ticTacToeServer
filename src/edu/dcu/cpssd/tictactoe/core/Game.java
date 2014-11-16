@@ -13,14 +13,14 @@ public class Game {
 	boolean first = false;
 
 	public Game(String id) throws GameException {
-		if(id == null || id.isEmpty()){
+		if (id == null || id.isEmpty()) {
 			throw new GameException(ErrorType.MISSING_PARAMETER_IN_REQUEST);
 		}
 		this.id = id;
 		this.users = new ArrayList<User>(2);
 		this.board = new Board();
 	}
-	
+
 	public Game(ArrayList<User> users, Board board) {
 		this.users = users;
 		this.board = board;
@@ -56,7 +56,7 @@ public class Game {
 			throw new GameException(ErrorType.NOT_PLAYERS_TURN);
 		}
 		int[] positions = board.move(position, turn);
-		this.turn = turn == 1? 2 : 1;
+		this.turn = turn == 1 ? 2 : 1;
 		return positions;
 	}
 
@@ -80,7 +80,13 @@ public class Game {
 	}
 
 	public int getWinner() {
-		return this.winner;
+		for (int i = 1; i <= 2; i++) {
+			if(isWinner(i)){
+				return turn;
+				
+			}
+		}
+		return 0;
 	}
 
 	public void setTurn(int turn) {

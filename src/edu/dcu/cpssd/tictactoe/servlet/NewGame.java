@@ -49,9 +49,8 @@ public class NewGame extends HttpServlet {
 			Game game = gameFactory.newGame(user);
 			
 			servletContex.setAttribute("gameFactory", gameFactory);
-			request.getSession().setAttribute("user", user);
-
-			JSONObject responseObject = new JSONObject().put("id", game.getId()).put("letter",
+			
+			JSONObject responseObject = new JSONObject().put("id", "game-" + user.getId()).put("letter",
 					game.getUserTurn(user));
 			writeResponse(response, responseObject);
 

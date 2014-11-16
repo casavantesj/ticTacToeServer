@@ -6,6 +6,7 @@ import edu.dcu.cpssd.tictactoe.core.exceptions.GameException;
 
 public class User {
 	private String name;
+	private int id;
 
 	public User(JSONObject jsonObject) {
 		this.name = jsonObject.getString("name");
@@ -24,5 +25,13 @@ public class User {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 }

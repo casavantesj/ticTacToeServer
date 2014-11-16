@@ -15,12 +15,13 @@ import org.json.JSONObject;
 import edu.dcu.cpssd.tictactoe.core.Board;
 import edu.dcu.cpssd.tictactoe.core.GameFactory;
 import edu.dcu.cpssd.tictactoe.core.Game;
+import edu.dcu.cpssd.tictactoe.core.User;
 import edu.dcu.cpssd.tictactoe.core.exceptions.GameException;
 
 /**
  * Servlet implementation class NextMove
  */
-@WebServlet(name = "nextMove", urlPatterns = { "/nextMove" })
+@WebServlet(name = "next", urlPatterns = { "/next" })
 public class NextMove extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +46,10 @@ public class NextMove extends HttpServlet {
 
 			GameFactory gameFactory = (GameFactory) servletContext.getAttribute("gameFactory");
 			String id = request.getParameter("id");
-			Game game = gameFactory.getGameWithId(id);
+			User user = gameFactory.getUserById(id);
+			Game game = gameFactory.getGameForUser(user);
+
+//			Game game = gameFactory.getGameWithId(id);
 
 			Board board = game.getBoard();
 			int turn = game.getTurn();

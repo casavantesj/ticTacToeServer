@@ -63,14 +63,15 @@ public class Move extends HttpServlet {
 		String id = request.getParameter("id");
 		int position = Integer.valueOf(request.getParameter("position"));
 		ServletContext servletContext = getServletContext();
-		User user = (User)request.getSession().getAttribute("user");
+//		User user = (User)request.getSession().getAttribute("user");
+		
 		GameFactory gameFactory = (GameFactory) servletContext.getAttribute("gameFactory");
-		Game game = gameFactory.getGameWithId(id);
+		User user = gameFactory.getUserById(id);
+		Game game = gameFactory.getGameForUser(user);
 
 		game.move(position, user);
 		
 		servletContext.setAttribute("gameFactory", gameFactory);
-		
 		return "ok";
 	}
 }

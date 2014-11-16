@@ -12,7 +12,6 @@ import org.junit.Test;
 import edu.dcu.cpssd.tictactoe.core.Board;
 import edu.dcu.cpssd.tictactoe.core.Game;
 import edu.dcu.cpssd.tictactoe.core.User;
-import edu.dcu.cpssd.tictactoe.core.exceptions.GameException;
 
 public class GameTest {
 	private ArrayList<User> users;
